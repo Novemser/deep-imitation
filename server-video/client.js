@@ -24,8 +24,10 @@ signalingLog.textContent = pc.signalingState;
 
 // connect audio / video
 pc.addEventListener('track', function(evt) {
-    if (evt.track.kind == 'video')
+    if (evt.track.kind == 'video') {
         document.getElementById('video').srcObject = evt.streams[0];
+        document.getElementById('video_2').srcObject = evt.streams[0];
+    }
     else
         document.getElementById('audio').srcObject = evt.streams[0];
 });
@@ -123,6 +125,7 @@ function start() {
     if (constraints.audio || constraints.video) {
         if (constraints.video) {
             document.getElementById('media').style.display = 'block';
+            document.getElementById('media_2').style.display = 'block';
         }
         navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
             stream.getTracks().forEach(function(track) {
