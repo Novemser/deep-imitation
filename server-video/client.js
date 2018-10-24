@@ -26,7 +26,6 @@ signalingLog.textContent = pc.signalingState;
 pc.addEventListener('track', function(evt) {
     if (evt.track.kind == 'video') {
         document.getElementById('video').srcObject = evt.streams[0];
-        document.getElementById('video_2').srcObject = evt.streams[0];
     }
     else
         document.getElementById('audio').srcObject = evt.streams[0];
@@ -131,6 +130,7 @@ function start() {
             stream.getTracks().forEach(function(track) {
                 pc.addTrack(track, stream);
             });
+            document.getElementById('video_2').srcObject = stream;
             return negotiate();
         }, function(err) {
             alert('Could not acquire media: ' + err);
