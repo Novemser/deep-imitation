@@ -10,8 +10,13 @@ _PORT = '8080'
 
 class FormatData(data_pb2_grpc.TransferImageServicer):
     def DoTransfer(self, request, context):
-        sp = tuple(request.shape)
-        print('received client request of image:shape ', sp)
+        # get the image from client request
+        img_shape = tuple(request.shape)
+        re_img = np.frombuffer(request.image, dtype=np.uint8)
+        # Convert back the data to original image shape.
+        re_img = np.reshape(re_img, img_shape)
+        print('received client request of image:shape ', img_shape)
+        # return a processed image
         img = np.ones((50, 50, 3), dtype=np.uint8) * 222
         img_shape = bytes(img.shape)
 
