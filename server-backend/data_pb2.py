@@ -16,10 +16,10 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='data.proto',
-  package='example',
+  package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\ndata.proto\x12\x07\x65xample\"\x14\n\x04\x44\x61ta\x12\x0c\n\x04text\x18\x01 \x01(\t28\n\nFormatData\x12*\n\x08\x44oFormat\x12\r.example.Data\x1a\r.example.Data\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\ndata.proto\"$\n\x04\x44\x61ta\x12\r\n\x05shape\x18\x01 \x01(\x0c\x12\r\n\x05image\x18\x02 \x01(\x0c\x32-\n\rTransferImage\x12\x1c\n\nDoTransfer\x12\x05.Data\x1a\x05.Data\"\x00\x62\x06proto3')
 )
 
 
@@ -27,15 +27,22 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _DATA = _descriptor.Descriptor(
   name='Data',
-  full_name='example.Data',
+  full_name='Data',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='text', full_name='example.Data.text', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='shape', full_name='Data.shape', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='Data.image', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -51,8 +58,8 @@ _DATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=23,
-  serialized_end=43,
+  serialized_start=14,
+  serialized_end=50,
 )
 
 DESCRIPTOR.message_types_by_name['Data'] = _DATA
@@ -61,24 +68,24 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 Data = _reflection.GeneratedProtocolMessageType('Data', (_message.Message,), dict(
   DESCRIPTOR = _DATA,
   __module__ = 'data_pb2'
-  # @@protoc_insertion_point(class_scope:example.Data)
+  # @@protoc_insertion_point(class_scope:Data)
   ))
 _sym_db.RegisterMessage(Data)
 
 
 
-_FORMATDATA = _descriptor.ServiceDescriptor(
-  name='FormatData',
-  full_name='example.FormatData',
+_TRANSFERIMAGE = _descriptor.ServiceDescriptor(
+  name='TransferImage',
+  full_name='TransferImage',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=45,
-  serialized_end=101,
+  serialized_start=52,
+  serialized_end=97,
   methods=[
   _descriptor.MethodDescriptor(
-    name='DoFormat',
-    full_name='example.FormatData.DoFormat',
+    name='DoTransfer',
+    full_name='TransferImage.DoTransfer',
     index=0,
     containing_service=None,
     input_type=_DATA,
@@ -86,8 +93,8 @@ _FORMATDATA = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
 ])
-_sym_db.RegisterServiceDescriptor(_FORMATDATA)
+_sym_db.RegisterServiceDescriptor(_TRANSFERIMAGE)
 
-DESCRIPTOR.services_by_name['FormatData'] = _FORMATDATA
+DESCRIPTOR.services_by_name['TransferImage'] = _TRANSFERIMAGE
 
 # @@protoc_insertion_point(module_scope)

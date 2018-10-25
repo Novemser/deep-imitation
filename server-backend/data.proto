@@ -1,8 +1,10 @@
 syntax = "proto3";
-package example;
-service FormatData {
-  rpc DoFormat(Data) returns (Data){}
+
+service TransferImage {
+  rpc DoTransfer(Data) returns (Data){}
 }
+
 message Data {
-  string text = 1;
+  bytes shape = 1;
+  bytes image = 2;
 }
