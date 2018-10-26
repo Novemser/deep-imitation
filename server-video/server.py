@@ -27,22 +27,21 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 def transfer(img):
     #img = np.ones((2, 2, 3), dtype=np.uint8) * 22
     print(1)
-    img_bytes = np.ndarray.tobytes(img)
+    # img_bytes = np.ndarray.tobytes(img)
+    img_bytes = img.tobytes()
     print(2)
     #client = data_pb2_grpc.TransferImageStub(channel=conn)
-
-    data = data_pb2.Data(
-        shape=bytes(img.shape),
-        image=img_bytes # compressed image
-    )
-    print('start transfer img via gRPC of shape:', img.shape)
-
+    # np.array(img.shape)
+    data = data_pb2.Data(image=img_bytes)
+    # print('start transfer img via gRPC of shape:', img.shape)
+    print(3)
     response = client.DoTransfer(data)
-    img_shape = tuple(response.shape)
-    img_new = np.frombuffer(response.image, dtype=np.uint8)
-    print("received: ", tuple(response.shape))
-    re_img = np.reshape(img_new, img_shape)
-    return re_img
+    print(4)
+    # img_shape = tuple(response.shape)
+    img_new = cv2.imdecode(np.fromstring(response.image, np.uint8), 1)
+    print("received transfered image: ", tuple(img_new.shape))
+    # re_img = np.reshape(img_new, img_shape)
+    return img_new
 
 class VideoTransformTrack(VideoStreamTrack):
     def __init__(self, track, transform):
