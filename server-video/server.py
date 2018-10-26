@@ -10,7 +10,7 @@ from av import VideoFrame
 
 from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
-
+from timeit import default_timer as timer
 import grpc
 import data_pb2, data_pb2_grpc
 import numpy as np
@@ -80,9 +80,12 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.time_base = frame.time_base
             return new_frame
         else:
+            start = timer()
             img = frame.to_ndarray(format='bgr24')
             result, encimg = cv2.imencode('.jpg', img, encode_param)
             generated = transfer(encimg)
+            end = timer()
+            print('process time:', end - start)
             
             # rebuild a VideoFrame, preserving timing information
             new_frame = VideoFrame.from_ndarray(generated, format='rgb24')
