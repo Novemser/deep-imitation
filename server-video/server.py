@@ -79,7 +79,7 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
-        else:
+        elif self.counter % 2 == 0:
             start = timer()
             img = frame.to_ndarray(format='bgr24')
             result, encimg = cv2.imencode('.jpg', img, encode_param)
@@ -92,6 +92,8 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
+        else:
+            return frame
 
 
 
