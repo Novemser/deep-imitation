@@ -15,14 +15,17 @@ import grpc
 import data_pb2, data_pb2_grpc
 import numpy as np
 import pickle
-
+from grpc._cython.cygrpc import CompressionAlgorithm
+from grpc._cython.cygrpc import CompressionLevel
+chan_ops = [('grpc.default_compression_algorithm', CompressionAlgorithm.gzip),
+            ('grpc.grpc.default_compression_level', CompressionLevel.high)]
 _HOST = '127.0.0.1'
 _PORT = '10000'
-conn = grpc.insecure_channel(_HOST + ':' + _PORT)
+conn = grpc.insecure_channel(_HOST + ':' + _PORT, options=chan_ops)
 client = data_pb2_grpc.TransferImageStub(channel=conn)
 
 ROOT = os.path.dirname(__file__)
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
 
 def transfer(img):
     #img = np.ones((2, 2, 3), dtype=np.uint8) * 22
