@@ -77,7 +77,7 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.time_base = frame.time_base
             return new_frame
         else:
-            img = frame.to_ndarray(format='rgb24')
+            img = frame.to_ndarray(format='bgr24')
             result, encimg = cv2.imencode('.jpg', img, encode_param)
             generated = transfer(encimg)
             
