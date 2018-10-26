@@ -11,8 +11,38 @@ from av import VideoFrame
 from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
-ROOT = os.path.dirname(__file__)
+import grpc
+import data_pb2, data_pb2_grpc
+import numpy as np
+import pickle
 
+_HOST = '127.0.0.1'
+_PORT = '10000'
+conn = grpc.insecure_channel(_HOST + ':' + _PORT)
+client = data_pb2_grpc.TransferImageStub(channel=conn)
+
+ROOT = os.path.dirname(__file__)
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+
+def transfer(img):
+    #img = np.ones((2, 2, 3), dtype=np.uint8) * 22
+    print(1)
+    img_bytes = np.ndarray.tobytes(img)
+    print(2)
+    #client = data_pb2_grpc.TransferImageStub(channel=conn)
+
+    data = data_pb2.Data(
+        shape=bytes(img.shape),
+        image=img_bytes # compressed image
+    )
+    print('start transfer img via gRPC of shape:', img.shape)
+
+    response = client.DoTransfer(data)
+    img_shape = tuple(response.shape)
+    img_new = np.frombuffer(response.image, dtype=np.uint8)
+    print("received: ", tuple(response.shape))
+    re_img = np.reshape(img_new, img_shape)
+    return re_img
 
 class VideoTransformTrack(VideoStreamTrack):
     def __init__(self, track, transform):
@@ -48,7 +78,9 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.time_base = frame.time_base
             return new_frame
         else:
-            return frame
+            img = frame.to_ndarray(format='bgr24')
+            result, encimg = cv2.imencode('.jpg', img, encode_param)
+            return transfer(encimg)
 
 
 async def index(request):
