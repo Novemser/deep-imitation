@@ -11,7 +11,7 @@ import math
 # Remember to add your installation path here
 
 # If you run `make install` (default path is `/usr/local/python` for Ubuntu), you can also access the OpenPose/python module from there. This will install OpenPose and the python library at your desired installation path. Ensure that this is in your python path in order to use it.
-sys.path.append('/usr/local/python')
+sys.path.append('/usr/local/python/')
 
 # Parameters for OpenPose. Take a look at C++ OpenPose example for meaning of components. Ensure all below are filled
 try:
@@ -32,7 +32,7 @@ params["render_threshold"] = 0.05
 params["num_gpu_start"] = 0
 params["disable_blending"] = False
 # Ensure you point to the correct path where models are located
-params["default_model_folder"] =  "/home/yaosy/baiduclub/openpose/models/"
+params["default_model_folder"] =  "../model/"
 # Construct OpenPose object allocates GPU memory
 
 body25_joint_info = [[17,15],
