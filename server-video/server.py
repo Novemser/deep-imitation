@@ -77,12 +77,12 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.time_base = frame.time_base
             return new_frame
         else:
-            img = frame.to_ndarray(format='bgr24')
+            img = frame.to_ndarray(format='rgb24')
             result, encimg = cv2.imencode('.jpg', img, encode_param)
             generated = transfer(encimg)
             
             # rebuild a VideoFrame, preserving timing information
-            new_frame = VideoFrame.from_ndarray(generated, format='bgr24')
+            new_frame = VideoFrame.from_ndarray(generated, format='rgb24')
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
