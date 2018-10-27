@@ -25,7 +25,7 @@ conn = grpc.insecure_channel(_HOST + ':' + _PORT, options=chan_ops)
 client = data_pb2_grpc.TransferImageStub(channel=conn)
 
 ROOT = os.path.dirname(__file__)
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
 
 def transfer(img):
     #img = np.ones((2, 2, 3), dtype=np.uint8) * 22

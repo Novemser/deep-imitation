@@ -122,15 +122,15 @@ function start() {
     }
     
     constraints.video = { 
-        width: 512, 
-        height: 512,
+        width: 336, 
+        height: 336,
         frameRate: { ideal: 10, max: 15 }
     }
 
     if (constraints.audio || constraints.video) {
         if (constraints.video) {
-            document.getElementById('media').style.display = 'block';
-            document.getElementById('media_2').style.display = 'block';
+            // document.getElementById('media').style.display = 'block';
+            // document.getElementById('media_2').style.display = 'block';
         }
         navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
             stream.getTracks().forEach(function(track) {
