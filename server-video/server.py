@@ -29,17 +29,17 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
 
 def transfer(img):
     #img = np.ones((2, 2, 3), dtype=np.uint8) * 22
-    print(1)
+    # print(1)
     # img_bytes = np.ndarray.tobytes(img)
     img_bytes = img.tobytes()
-    print(2)
+    # print(2)
     #client = data_pb2_grpc.TransferImageStub(channel=conn)
     # np.array(img.shape)
     data = data_pb2.Data(image=img_bytes)
     # print('start transfer img via gRPC of shape:', img.shape)
-    print(3)
+    # print(3)
     response = client.DoTransfer(data)
-    print(4)
+    # print(4)
     # img_shape = tuple(response.shape)
     img_new = cv2.imdecode(np.fromstring(response.image, np.uint8), 1)
     print("received transfered image: ", tuple(img_new.shape))
@@ -79,10 +79,11 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
-        elif self.counter % 2 == 0:
+        else:
             start = timer()
             img = frame.to_ndarray(format='bgr24')
             result, encimg = cv2.imencode('.jpg', img, encode_param)
+            # encimg = cv2.resize(encimg, (512, 512))
             generated = transfer(encimg)
             end = timer()
             print('process time:', end - start)
@@ -92,8 +93,8 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
-        else:
-            return frame
+        # else:
+        #     return frame
 
 
 
