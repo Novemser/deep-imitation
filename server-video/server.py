@@ -41,8 +41,9 @@ def transfer(img):
     response = client.DoTransfer(data)
     # print(4)
     # img_shape = tuple(response.shape)
+    print("received transfered image size: ", response.image)
     img_new = cv2.imdecode(np.fromstring(response.image, np.uint8), 1)
-    print("received transfered image: ", tuple(img_new.shape))
+    print("proceed transfered image: ", tuple(img_new.shape))
     # re_img = np.reshape(img_new, img_shape)
     return img_new
 
