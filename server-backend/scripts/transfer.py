@@ -24,6 +24,8 @@ from util.visualizer import Visualizer
 with open('../data/test_opt.pkl', mode='rb') as f:
     opt = pickle.load(f)
 opt.batchSize = 24
+opt.loadSize = 336
+opt.label_nc = 25
 
 iter_path = os.path.join(opt.checkpoints_dir, opt.name, 'iter.txt')
 visualizer = Visualizer(opt)
@@ -55,6 +57,7 @@ if __name__ == '__main__':
     test_file = '../data/syntest.png'
     inputs = [cv2.imread(test_file, 0)]
     outputs = model_inference(inputs)
+    cv2.imwrite("../data/syntestOut.png", outputs[0])
     plt.imshow(outputs[0])
     plt.show()
 

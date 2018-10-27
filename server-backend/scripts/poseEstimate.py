@@ -23,7 +23,7 @@ params = dict()
 params["logging_level"] = 3
 params["output_resolution"] = "-1x-1"
 params["net_resolution"] = "-1x368"
-params["model_pose"] = "COCO"
+params["model_pose"] = "BODY_25"
 params["alpha_pose"] = 0.6
 params["scale_gap"] = 0.3
 params["scale_number"] = 1
@@ -77,7 +77,7 @@ def create_label(shape, joint_list):
     if params["model_pose"] == 'COCO':
         total_joint = 17
         joint_info = coco_joint_info
-    elif params["model_pose"] == 'body_25':
+    elif params["model_pose"] == 'BODY_25':
         total_joint = 24
         joint_info = body25_joint_info
 
@@ -96,7 +96,7 @@ def create_label(shape, joint_list):
 
 openpose = OpenPose(params)
 
-def poseEstimate(img, is_square=True, resize=(512, 512)):
+def poseEstimate(img, is_square=True, resize=(336, 336)):
     """
     Param
     img: image of OpenCV format (H X W X BGR)
