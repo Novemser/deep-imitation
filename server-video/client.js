@@ -122,7 +122,7 @@ function start() {
         }
     }
     
-    constrains.video = { width: 512, height: 512 }
+    constraints.video = { width: 512, height: 512 }
 
     if (constraints.audio || constraints.video) {
         if (constraints.video) {
