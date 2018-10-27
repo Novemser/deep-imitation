@@ -105,8 +105,7 @@ function start() {
 
     var constraints = {
         audio: document.getElementById('use-audio').checked,
-        video: false,
-        frameRate: { ideal: 10, max: 15 }
+        video: false
     };
 
     if (document.getElementById('use-video').checked) {
@@ -122,7 +121,11 @@ function start() {
         }
     }
     
-    constraints.video = { width: 512, height: 512 }
+    constraints.video = { 
+        width: 512, 
+        height: 512,
+        frameRate: { ideal: 10, max: 15 }
+    }
 
     if (constraints.audio || constraints.video) {
         if (constraints.video) {
