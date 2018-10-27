@@ -56,6 +56,7 @@ class VideoTransformTrack(VideoStreamTrack):
     async def recv(self):
         frame = await self.track.recv()
         self.counter += 1
+        print(timer())
 
         if self.transform == 'edges':
             # perform edge detection
@@ -79,22 +80,22 @@ class VideoTransformTrack(VideoStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
-        else:
-            start = timer()
-            img = frame.to_ndarray(format='bgr24')
-            result, encimg = cv2.imencode('.jpg', img, encode_param)
-            # encimg = cv2.resize(encimg, (512, 512))
-            generated = transfer(encimg)
-            end = timer()
-            print('process time:', end - start)
-            
-            # rebuild a VideoFrame, preserving timing information
-            new_frame = VideoFrame.from_ndarray(generated, format='rgb24')
-            new_frame.pts = frame.pts
-            new_frame.time_base = frame.time_base
-            return new_frame
         # else:
-        #     return frame
+        #     start = timer()
+        #     img = frame.to_ndarray(format='bgr24')
+        #     result, encimg = cv2.imencode('.jpg', img, encode_param)
+        #     # encimg = cv2.resize(encimg, (512, 512))
+        #     generated = transfer(encimg)
+        #     end = timer()
+        #     print('process time:', end - start)
+            
+        #     # rebuild a VideoFrame, preserving timing information
+        #     new_frame = VideoFrame.from_ndarray(generated, format='rgb24')
+        #     new_frame.pts = frame.pts
+        #     new_frame.time_base = frame.time_base
+        #     return new_frame
+        else:
+            return frame
 
 
 
