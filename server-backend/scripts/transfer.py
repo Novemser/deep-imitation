@@ -10,7 +10,7 @@ from pathlib import Path
 from collections import OrderedDict
 from torch.autograd import Variable
 
-
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 pix2pixhd_dir = Path('../src/pix2pixHD/')
 
 import sys
