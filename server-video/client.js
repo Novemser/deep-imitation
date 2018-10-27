@@ -122,8 +122,8 @@ function start() {
     }
     
     constraints.video = { 
-        width: 512, 
-        height: 512,
+        width: 336, 
+        height: 336,
         frameRate: { ideal: 10, max: 15 }
     }
 
