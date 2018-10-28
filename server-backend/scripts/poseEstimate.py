@@ -11,7 +11,10 @@ import math
 # Remember to add your installation path here
 
 # If you run `make install` (default path is `/usr/local/python` for Ubuntu), you can also access the OpenPose/python module from there. This will install OpenPose and the python library at your desired installation path. Ensure that this is in your python path in order to use it.
-sys.path.append('/usr/local/python/openpose')
+if '2.7' in sys.version:
+    sys.path.append('/usr/local/python/')
+else:
+    sys.path.append('/usr/local/python/openpose')
 
 # Parameters for OpenPose. Take a look at C++ OpenPose example for meaning of components. Ensure all below are filled
 try:
@@ -19,6 +22,7 @@ try:
 except:
     raise Exception('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
+keypoint_misVal = 8
 params = dict()
 params["logging_level"] = 3
 params["output_resolution"] = "-1x-1"
@@ -74,18 +78,22 @@ coco_joint_info = [[1, 2],
 
 def create_label(shape, joint_list):
     label = np.zeros(shape, dtype=np.uint8)
+    miss_kpNum = 0
     if params["model_pose"] == 'COCO':
         total_joint = 17
         joint_info = coco_joint_info
     elif params["model_pose"] == 'BODY_25':
         total_joint = 24
         joint_info = body25_joint_info
-
+    
     for limb_type in range(total_joint):
         joint_indices = joint_info[limb_type]
         joint_coords = joint_list[joint_indices, :2]
         if 0 in joint_coords:
-            continue
+            miss_kpNum += 1
+            if miss_kpNum >= keypoint_misVal:
+                return -1
+            else: continue
         coords_center = tuple(np.round(np.mean(joint_coords, 0)).astype(int))
         limb_dir = joint_coords[0, :] - joint_coords[1, :]
         limb_length = np.linalg.norm(limb_dir)
