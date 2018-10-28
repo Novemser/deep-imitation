@@ -23,6 +23,7 @@ except:
     raise Exception('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 keypoint_misVal = 8
+last_create_label = np.zeros((336, 336))
 params = dict()
 params["logging_level"] = 3
 params["output_resolution"] = "-1x-1"
@@ -92,7 +93,7 @@ def create_label(shape, joint_list):
         if 0 in joint_coords:
             miss_kpNum += 1
             if miss_kpNum >= keypoint_misVal:
-                return -1
+                return last_create_label
             else: continue
         coords_center = tuple(np.round(np.mean(joint_coords, 0)).astype(int))
         limb_dir = joint_coords[0, :] - joint_coords[1, :]
@@ -127,6 +128,7 @@ def poseEstimate(img, is_square=True, resize=(336, 336)):
     keypoints, output_image = openpose.forward(img, True)
     keypoints = keypoints[0].reshape(-1, 3)
     label = create_label(img.shape[:2], keypoints)
+    last_create_label = label
 
     return label
 
