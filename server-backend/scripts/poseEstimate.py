@@ -93,7 +93,8 @@ def create_label(shape, joint_list):
         if 0 in joint_coords:
             miss_kpNum += 1
             if miss_kpNum >= keypoint_misVal:
-                return last_create_label
+                return -1
+                #return last_create_label
             else: continue
         coords_center = tuple(np.round(np.mean(joint_coords, 0)).astype(int))
         limb_dir = joint_coords[0, :] - joint_coords[1, :]
@@ -128,7 +129,7 @@ def poseEstimate(img, is_square=True, resize=(336, 336)):
     keypoints, output_image = openpose.forward(img, True)
     keypoints = keypoints[0].reshape(-1, 3)
     label = create_label(img.shape[:2], keypoints)
-    last_create_label = label
+    #last_create_label = label
 
     return label
 
