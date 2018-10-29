@@ -56,7 +56,10 @@ def serve():
             try:
                 pose = poseEstimate(re_img)
                 print('inferencing...')
-                img = model_inference([pose])[0]
+                if pose == -1:
+                    img = np.zeros((336, 336, 3), np.uint8)
+                else:
+                    img = model_inference([pose])[0]
                 result, encimg = cv2.imencode('.jpg', img)
                 print('Generated image of shape:', img.shape)
                 processed_q.put(encimg)
