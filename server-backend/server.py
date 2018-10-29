@@ -43,6 +43,7 @@ class FormatData(data_pb2_grpc.TransferImageServicer):
         print('used time:', end - start, 'res len:', len(res.image))
         return res
 
+blank_img = np.zeros((336, 336, 3), np.uint8)
 def serve():
     grpcServer = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
     data_pb2_grpc.add_TransferImageServicer_to_server(FormatData(), grpcServer)
@@ -56,13 +57,16 @@ def serve():
             try:
                 pose = poseEstimate(re_img)
                 print('inferencing...')
-                img = model_inference([pose])[0]
+                if pose == -1:
+                    img = blank_img
+                else:
+                    img = model_inference([pose])[0]
                 result, encimg = cv2.imencode('.jpg', img)
                 print('Generated image of shape:', img.shape)
                 processed_q.put(encimg)
             except IndexError as e:
                 print('Detected index err.', e)
-                result, re_img = cv2.imencode('.jpg', re_img)
+                result, re_img = cv2.imencode('.jpg', blank_img)
                 processed_q.put(re_img)
             #time.sleep(_ONE_DAY_IN_SECONDS)
             print('enter next round...')
