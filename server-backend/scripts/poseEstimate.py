@@ -23,7 +23,7 @@ except:
     raise Exception('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 keypoint_misVal = 8
-init_img = cv2.imread('../data/posetest.png')
+init_img = cv2.imread('../data/MJ_danceinit.png')
 # last_create_label = np.zeros((336, 336))
 params = dict()
 params["logging_level"] = 3
@@ -107,7 +107,7 @@ def create_label(shape, joint_list):
 
 openpose = OpenPose(params)
 
-def poseEstimate(img, is_square=True, resize=(336, 336)):
+def poseEstimate(img, is_square=True, resize=(480, 480)):
     """
     Param
     img: image of OpenCV format (H X W X BGR)
