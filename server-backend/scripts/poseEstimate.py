@@ -23,7 +23,7 @@ except:
     raise Exception('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 keypoint_misVal = 8
-init_img = cv2.imread('../data/MJ_danceinit.png')
+init_img = cv2.imread('../data/girl1_1_danceinit.png')
 # last_create_label = np.zeros((336, 336))
 params = dict()
 params["logging_level"] = 3
@@ -87,7 +87,7 @@ def create_label(shape, joint_list):
     elif params["model_pose"] == 'BODY_25':
         total_joint = 24
         joint_info = body25_joint_info
-    
+
     for limb_type in range(total_joint):
         joint_indices = joint_info[limb_type]
         joint_coords = joint_list[joint_indices, :2]
