@@ -13,7 +13,7 @@ processed_q = queue.Queue()
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 _HOST = '127.0.0.1'
-_PORT = '8080'
+_PORT = '9090'
 from timeit import default_timer as timer
 
 class FormatData(data_pb2_grpc.TransferImageServicer):
@@ -43,7 +43,9 @@ class FormatData(data_pb2_grpc.TransferImageServicer):
         print('used time:', end - start, 'res len:', len(res.image))
         return res
 
-blank_img = np.zeros((336, 336, 3), np.uint8)
+#blank_img = np.zeros((480, 480, 3), np.uint8)
+blank_img = cv2.imread('/data1/deeplearning/deep-imitation/server-backend/data/girl1_1_danceinit.png')
+blank_img = blank_img[:, :, ::-1]
 def serve():
     grpcServer = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
     data_pb2_grpc.add_TransferImageServicer_to_server(FormatData(), grpcServer)
@@ -57,10 +59,10 @@ def serve():
             try:
                 pose = poseEstimate(re_img)
                 print('inferencing...')
-                if pose == -1:
-                    img = blank_img
-                else:
-                    img = model_inference([pose])[0]
+                #if pose == -1:
+                #    img = blank_img
+                #else:
+                img = model_inference([pose])[0]
                 result, encimg = cv2.imencode('.jpg', img)
                 print('Generated image of shape:', img.shape)
                 processed_q.put(encimg)
@@ -68,6 +70,10 @@ def serve():
                 print('Detected index err.', e)
                 result, re_img = cv2.imencode('.jpg', blank_img)
                 processed_q.put(re_img)
+#            except ValueError as e:
+#                print('Detected index err.', e)
+#                result, re_img = cv2.imencode('.jpg', blank_img)
+#                processed_q.put(re_img)
             #time.sleep(_ONE_DAY_IN_SECONDS)
             print('enter next round...')
     except KeyboardInterrupt:
