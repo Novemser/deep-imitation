@@ -23,7 +23,7 @@ except:
     raise Exception('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 keypoint_misVal = 8
-init_img = cv2.imread('../data/girl1_1_danceinit.png')
+init_img = cv2.imread('../data/posetest.png')
 # last_create_label = np.zeros((336, 336))
 params = dict()
 params["logging_level"] = 3
@@ -36,7 +36,7 @@ params["scale_number"] = 1
 params["render_threshold"] = 0.05
 # If GPU version is built, and multiple GPUs are available, set the ID here
 params["num_gpu_start"] = 0
-params["disable_blending"] = False
+params["disable_blending"] = True
 # Ensure you point to the correct path where models are located
 params["default_model_folder"] =  "../model/"
 # Construct OpenPose object allocates GPU memory
@@ -92,11 +92,11 @@ def create_label(shape, joint_list):
         joint_indices = joint_info[limb_type]
         joint_coords = joint_list[joint_indices, :2]
         if 0 in joint_coords:
-            miss_kpNum += 1
-            if miss_kpNum >= keypoint_misVal:
-                return init_label
+            continue
+            #if miss_kpNum >= keypoint_misVal:
+                #return init_label
                 #return last_create_label
-            else: continue
+            #else: continue
         coords_center = tuple(np.round(np.mean(joint_coords, 0)).astype(int))
         limb_dir = joint_coords[0, :] - joint_coords[1, :]
         limb_length = np.linalg.norm(limb_dir)
@@ -107,7 +107,7 @@ def create_label(shape, joint_list):
 
 openpose = OpenPose(params)
 
-def poseEstimate(img, is_square=True, resize=(480, 480)):
+def poseEstimate(img, is_square=True, resize=(336, 336)):
     """
     Param
     img: image of OpenCV format (H X W X BGR)
@@ -126,15 +126,17 @@ def poseEstimate(img, is_square=True, resize=(480, 480)):
         # Output keypoints and the image with the human skeleton blended on it
 
         img = img[oh:oh+shape_dst, ow:ow+shape_dst]
-    img = cv2.resize(img, resize)
+    # img = cv2.resize(img, resize)
     keypoints, output_image = openpose.forward(img, True)
+    if len(keypoints) == 0:
+        print(np.zeros_like(img[:2]).shape)
+        return np.zeros(img.shape[:2], dtype=np.uint8), np.zeros_like(img, dtype=np.uint8)
     keypoints = keypoints[0].reshape(-1, 3)
     label = create_label(img.shape[:2], keypoints)
     # last_create_label = label
 
-    return label
+    return label, output_image
 
-init_label = poseEstimate(init_img)
 if __name__ == '__main__':
     test_img = cv2.imread('../data/posetest.png')
     label = poseEstimate(test_img)

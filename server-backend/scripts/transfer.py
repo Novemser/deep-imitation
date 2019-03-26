@@ -24,8 +24,9 @@ from util.visualizer import Visualizer
 with open('../data/test_opt.pkl', mode='rb') as f:
     opt = pickle.load(f)
 opt.batchSize = 24
-opt.loadSize = 336
+opt.loadSize = 480
 opt.label_nc = 25
+opt.no_flip = True
 
 iter_path = os.path.join(opt.checkpoints_dir, opt.name, 'iter.txt')
 visualizer = Visualizer(opt)
