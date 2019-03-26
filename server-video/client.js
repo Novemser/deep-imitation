@@ -122,9 +122,9 @@ function start() {
     }
     
     constraints.video = { 
-        width: 336, 
-        height: 336,
-        frameRate: { ideal: 10, max: 15 }
+        width: 480, 
+        height: 480,
+        frameRate: { ideal: 5, max: 5 }
     }
 
     if (constraints.audio || constraints.video) {

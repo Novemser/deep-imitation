@@ -20,7 +20,7 @@ from grpc._cython.cygrpc import CompressionLevel
 chan_ops = [('grpc.default_compression_algorithm', CompressionAlgorithm.gzip),
             ('grpc.grpc.default_compression_level', CompressionLevel.high)]
 _HOST = '127.0.0.1'
-_PORT = '10000'
+_PORT = '10001'
 conn = grpc.insecure_channel(_HOST + ':' + _PORT, options=chan_ops)
 client = data_pb2_grpc.TransferImageStub(channel=conn)
 
